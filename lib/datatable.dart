@@ -13,8 +13,12 @@ class DatabaseTable extends StatelessWidget {
     return true;
   }
 
-  List<TableRow> buildTable(List fields, List listdata) {
-    List<Widget> headers = fields
+  List<TableRow> buildTable(List listdata) {
+    List usedFields = [];
+    (listdata[0] as Map).forEach((key, value) {
+      usedFields.add(key);
+    });
+    List<Widget> headers = usedFields
         .map((field) => Padding(
               padding: const EdgeInsets.all(5.0),
               child: Text(
@@ -28,7 +32,7 @@ class DatabaseTable extends StatelessWidget {
     for (int i = 0; i < listdata.length; i++) {
       List row = [];
       List<Widget> rowsText = [];
-      for (var field in fields) {
+      for (var field in usedFields) {
         row.add(listdata[i][field]);
       }
       rowsText.addAll(row
@@ -53,9 +57,8 @@ class DatabaseTable extends StatelessWidget {
               children: [
                 Text(query),
                 Table(
-                    defaultColumnWidth: IntrinsicColumnWidth(flex: 0.2),
-                    border: TableBorder.all(),
-                    children: buildTable(data["fields"], data["data"])),
+                    border: TableBorder.all(color: Colors.red),
+                    children: buildTable(data["data"])),
               ],
             )
           : Column(

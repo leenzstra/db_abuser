@@ -26,6 +26,7 @@ class _InsertIntoPageState extends State<InsertIntoPage> {
     String q = "INSERT INTO `$table` (";
     List keys = [];
     List values = [];
+    print(val);
     val.forEach((key, value) {
       keys.add(key);
       values.add(value);
@@ -46,7 +47,7 @@ class _InsertIntoPageState extends State<InsertIntoPage> {
           .hasMatch(values[i].toString())) {
         q += 'null';
       } else {
-        q += "${values[i]}";
+        q += "'${values[i]}'";
       }
 
       if (i != val.length - 1) {

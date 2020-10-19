@@ -1,4 +1,3 @@
-import 'package:db_abuser/funcs.dart';
 import 'package:db_abuser/pages/select_page.dart';
 import 'package:db_abuser/pages/update_page.dart';
 import 'package:db_abuser/ui/button.dart';
