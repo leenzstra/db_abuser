@@ -24,33 +24,39 @@ class _InsertIntoPageState extends State<InsertIntoPage> {
 
   buildQuery(Map val) {
     String q = "INSERT INTO `$table` (";
-    List keys = [];
-    List values = [];
+    List fieldsList = [];
+    List valuesList = [];
+    List typesList = [];
     print(val);
+    int tmpCounter = 0;
     val.forEach((key, value) {
-      keys.add(key);
-      values.add(value);
+      if (value != '') {
+        fieldsList.add(key);
+        valuesList.add(value);
+        typesList.add(types[tmpCounter]);
+      }
+      tmpCounter++;
     });
-    for (int i = 0; i < val.length; i++) {
-      q += "`${keys[i]}`";
-      if (i != val.length - 1) {
+    for (int i = 0; i < valuesList.length; i++) {
+      q += "`${fieldsList[i]}`";
+      if (i != valuesList.length - 1) {
         q += ', ';
       }
     }
     q += ") VALUES (";
-    for (int i = 0; i < val.length; i++) {
-      if (funcs.checkFieldIsNum(types[i])) {
-        q += "${values[i]}";
-      } else if (funcs.checkFieldIsDate(types[i])) {
-        q += "'" + (values[i].toString()).substring(0, 10) + "'";
+    for (int i = 0; i < valuesList.length; i++) {
+      if (funcs.checkFieldIsNum(typesList[i])) {
+        q += "${valuesList[i]}";
+      } else if (funcs.checkFieldIsDate(typesList[i])) {
+        q += "'" + (valuesList[i].toString()).substring(0, 10) + "'";
       } else if (RegExp('null', caseSensitive: false)
-          .hasMatch(values[i].toString())) {
+          .hasMatch(valuesList[i].toString())) {
         q += 'null';
       } else {
-        q += "'${values[i]}'";
+        q += "'${valuesList[i]}'";
       }
 
-      if (i != val.length - 1) {
+      if (i != valuesList.length - 1) {
         q += ', ';
       }
     }
