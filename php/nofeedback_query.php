@@ -1,6 +1,8 @@
 
 <?php 
     include("connect.php");
+    $dbname = $_POST['db'];
+    $connection = conn($dbname);
 
     $queryResult = $connection->
         query($_POST["query"]);

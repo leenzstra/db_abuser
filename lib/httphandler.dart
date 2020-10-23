@@ -7,13 +7,16 @@ import 'package:http/http.dart' as http;
 //map["result"] - результат
 //map["data"] - данные
 
-Future<Map<String, dynamic>> postHTTP(
-    {@required String fileLink, @required String query}) async {
-  Map<String, String> body = {"query": query};
+Future<Map<String, dynamic>> postHTTP(String file, String query,
+    {String db = "_nodb_"}) async {
+  Map<String, String> body = {"query": query, "db": db};
   http.Response response =
-      await http.post('http://localhost/php/$fileLink', body: body);
+      await http.post('http://localhost/php/$file', body: body);
   if (response.statusCode >= 200) {
+    print("POST: $query");
+    print(response.body);
     Map<String, dynamic> map = JsonDecoder().convert(response.body);
+    print(map);
     return map;
   } else {
     print(response.statusCode);

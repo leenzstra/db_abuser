@@ -7,8 +7,8 @@ import 'package:db_abuser/ui/ui_funcs.dart' as ui_funcs;
 import 'package:db_abuser/funcs.dart' as funcs;
 
 class SelectPage extends StatefulWidget {
-  SelectPage({Key key}) : super(key: key);
-
+  SelectPage(this.db, {Key key}) : super(key: key);
+  final String db;
   @override
   _SelectPageState createState() => _SelectPageState();
 }
@@ -38,7 +38,7 @@ class _SelectPageState extends State<SelectPage> {
       child: FormBuilderDropdown(
         onChanged: (value) async {
           table = value;
-          Map m = await ui_funcs.getFieldsAndTypes(table);
+          Map m = await ui_funcs.getFieldsAndTypes(table, widget.db);
           fields = m["fields"];
           types = m["types"];
           setState(() {
@@ -100,7 +100,7 @@ class _SelectPageState extends State<SelectPage> {
                         child: Column(
                           children: [
                             FutureBuilder(
-                              future: funcs.getTables(),
+                              future: funcs.getTables(widget.db),
                               builder: (context, AsyncSnapshot<Map> snapshot) {
                                 List<Widget> children;
                                 if (snapshot.hasData) {
@@ -153,8 +153,9 @@ class _SelectPageState extends State<SelectPage> {
                                   _autoFormKey.currentState.save();
                                   String query = buildQuery(
                                       _autoFormKey.currentState.value);
-                                  Map<String, dynamic> data = await funcs
-                                      .selectTable(table, query: query);
+                                  Map<String, dynamic> data =
+                                      await funcs.selectTable(table,
+                                          query: query, db: widget.db);
                                   setState(() {
                                     dbTable = new DatabaseTable(data, query);
                                   });
@@ -185,8 +186,9 @@ class _SelectPageState extends State<SelectPage> {
                                     String query =
                                         _manualKey.currentState.value['manual'];
                                     print(query);
-                                    Map<String, dynamic> data = await funcs
-                                        .selectTableManual(query: query);
+                                    Map<String, dynamic> data =
+                                        await funcs.selectTableManual(
+                                            query: query, db: widget.db);
                                     setState(() {
                                       dbTable = new DatabaseTable(data, query);
                                     });

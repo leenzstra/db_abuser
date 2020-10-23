@@ -7,8 +7,8 @@ import 'package:db_abuser/funcs.dart' as funcs;
 import 'package:db_abuser/ui/ui_funcs.dart' as ui_funcs;
 
 class AlterTablePage extends StatefulWidget {
-  AlterTablePage({Key key}) : super(key: key);
-
+  AlterTablePage(this.db, {Key key}) : super(key: key);
+  final String db;
   @override
   _AlterTablePageState createState() => _AlterTablePageState();
 }
@@ -30,7 +30,7 @@ class _AlterTablePageState extends State<AlterTablePage> {
       child: FormBuilderDropdown(
         onChanged: (value) async {
           table = value;
-          Map m = await ui_funcs.getFieldsAndTypes(table);
+          Map m = await ui_funcs.getFieldsAndTypes(table, widget.db);
           fields = m["fields"];
           types = m["types"];
           setState(() {
@@ -90,7 +90,7 @@ class _AlterTablePageState extends State<AlterTablePage> {
                       child: Column(
                         children: [
                           FutureBuilder(
-                            future: funcs.getTables(),
+                            future: funcs.getTables(widget.db),
                             builder: (context, AsyncSnapshot<Map> snapshot) {
                               List<Widget> children;
                               if (snapshot.hasData) {
@@ -105,8 +105,8 @@ class _AlterTablePageState extends State<AlterTablePage> {
                                         _formKey.currentState.save();
                                         String query = buildQuery(
                                             _formKey.currentState.value);
-                                        String res =
-                                            await funcs.dropTable(query: query);
+                                        String res = await funcs.dropTable(
+                                            query: query, db: widget.db);
                                         Navigator.of(context).pushReplacement(
                                             new MaterialPageRoute(
                                           builder: (context) => SuccessPage(

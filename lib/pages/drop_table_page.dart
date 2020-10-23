@@ -6,8 +6,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:db_abuser/funcs.dart' as funcs;
 
 class DropTablePage extends StatefulWidget {
-  DropTablePage({Key key}) : super(key: key);
-
+  DropTablePage(this.db, {Key key}) : super(key: key);
+  final String db;
   @override
   _DropTablePageState createState() => _DropTablePageState();
 }
@@ -57,7 +57,7 @@ class _DropTablePageState extends State<DropTablePage> {
                     child: Column(
                       children: [
                         FutureBuilder(
-                          future: funcs.getTables(),
+                          future: funcs.getTables(widget.db),
                           builder: (context, AsyncSnapshot<Map> snapshot) {
                             List<Widget> children;
                             if (snapshot.hasData) {
@@ -66,8 +66,8 @@ class _DropTablePageState extends State<DropTablePage> {
                                 DButton(
                                     onPressed: () async {
                                       String query = buildQuery(table);
-                                      String res =
-                                          await funcs.dropTable(query: query);
+                                      String res = await funcs.dropTable(
+                                          query: query, db: widget.db);
                                       Navigator.of(context).pushReplacement(
                                           new MaterialPageRoute(
                                         builder: (context) => SuccessPage(

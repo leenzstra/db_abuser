@@ -7,8 +7,8 @@ import 'package:db_abuser/ui/ui_funcs.dart' as ui_funcs;
 import 'package:db_abuser/funcs.dart' as funcs;
 
 class UpdatePage extends StatefulWidget {
-  UpdatePage({Key key}) : super(key: key);
-
+  UpdatePage(this.db, {Key key}) : super(key: key);
+  final String db;
   @override
   _UpdatePageState createState() => _UpdatePageState();
 }
@@ -51,7 +51,7 @@ class _UpdatePageState extends State<UpdatePage> {
       child: FormBuilderDropdown(
         onChanged: (value) async {
           table = value;
-          Map m = await ui_funcs.getFieldsAndTypes(table);
+          Map m = await ui_funcs.getFieldsAndTypes(table, widget.db);
           fields = m["fields"];
           types = m["types"];
           setState(() {
@@ -119,7 +119,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     child: Column(
                       children: [
                         FutureBuilder(
-                          future: funcs.getTables(),
+                          future: funcs.getTables(widget.db),
                           builder: (context, AsyncSnapshot<Map> snapshot) {
                             List<Widget> children;
                             if (snapshot.hasData) {
@@ -191,8 +191,8 @@ class _UpdatePageState extends State<UpdatePage> {
                               _formKey.currentState.save();
                               String query =
                                   buildQuery(_formKey.currentState.value);
-                              String res =
-                                  await funcs.updateTable(query: query);
+                              String res = await funcs.updateTable(
+                                  query: query, db: widget.db);
                               Navigator.of(context)
                                   .pushReplacement(new MaterialPageRoute(
                                 builder: (context) =>

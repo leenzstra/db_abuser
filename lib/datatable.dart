@@ -38,7 +38,7 @@ class DatabaseTable extends StatelessWidget {
       rowsText.addAll(row
           .map((e) => Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: Text(e),
+                child: Text(e.toString()),
               ))
           .toList());
       rowsList.add(rowsText);
