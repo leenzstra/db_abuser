@@ -7,8 +7,8 @@ import 'package:db_abuser/ui/ui_funcs.dart' as ui_funcs;
 import 'package:db_abuser/funcs.dart' as funcs;
 
 class DeletePage extends StatefulWidget {
-  DeletePage({Key key}) : super(key: key);
-
+  DeletePage(this.db, {Key key}) : super(key: key);
+  final String db;
   @override
   _DeletePageState createState() => _DeletePageState();
 }
@@ -35,7 +35,7 @@ class _DeletePageState extends State<DeletePage> {
       child: FormBuilderDropdown(
         onChanged: (value) async {
           table = value;
-          Map m = await ui_funcs.getFieldsAndTypes(table);
+          Map m = await ui_funcs.getFieldsAndTypes(table, widget.db);
           fields = m["fields"];
           types = m["types"];
           setState(() {
@@ -93,7 +93,7 @@ class _DeletePageState extends State<DeletePage> {
                       child: Column(
                         children: [
                           FutureBuilder(
-                            future: funcs.getTables(),
+                            future: funcs.getTables(widget.db),
                             builder: (context, AsyncSnapshot<Map> snapshot) {
                               List<Widget> children;
                               if (snapshot.hasData) {
@@ -108,8 +108,9 @@ class _DeletePageState extends State<DeletePage> {
                                         _formKey.currentState.save();
                                         String query = buildQuery(
                                             _formKey.currentState.value);
-                                        String res = await funcs
-                                            .deleteFromTable(query: query);
+                                        String res =
+                                            await funcs.deleteFromTable(
+                                                query: query, db: widget.db);
                                         Navigator.of(context).pushReplacement(
                                             new MaterialPageRoute(
                                           builder: (context) => SuccessPage(

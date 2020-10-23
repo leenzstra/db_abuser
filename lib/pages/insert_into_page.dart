@@ -8,8 +8,8 @@ import 'package:db_abuser/funcs.dart' as funcs;
 import 'package:intl/intl.dart';
 
 class InsertIntoPage extends StatefulWidget {
-  InsertIntoPage({Key key}) : super(key: key);
-
+  InsertIntoPage(this.db, {Key key}) : super(key: key);
+  final String db;
   @override
   _InsertIntoPageState createState() => _InsertIntoPageState();
 }
@@ -137,7 +137,7 @@ class _InsertIntoPageState extends State<InsertIntoPage> {
                     child: Column(
                       children: [
                         FutureBuilder(
-                          future: funcs.getTables(),
+                          future: funcs.getTables(widget.db),
                           builder: (context, AsyncSnapshot<Map> snapshot) {
                             List<Widget> children;
                             if (snapshot.hasData) {
@@ -146,7 +146,7 @@ class _InsertIntoPageState extends State<InsertIntoPage> {
                                 DButton(
                                     onPressed: () async {
                                       Map<String, List> m = await ui_funcs
-                                          .getFieldsAndTypes(table);
+                                          .getFieldsAndTypes(table, widget.db);
                                       fields = m["fields"];
                                       types = m["types"];
                                       setState(() {
@@ -193,8 +193,10 @@ class _InsertIntoPageState extends State<InsertIntoPage> {
                                             _formKey.currentState.save();
                                             String query = buildQuery(
                                                 _formKey.currentState.value);
-                                            String res = await funcs
-                                                .insertIntoTable(query: query);
+                                            String res =
+                                                await funcs.insertIntoTable(
+                                                    query: query,
+                                                    db: widget.db);
                                             Navigator.of(context)
                                                 .pushReplacement(
                                                     new MaterialPageRoute(

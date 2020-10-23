@@ -1,8 +1,11 @@
 <?php
     include("connect.php");
+    $dbname = $_POST['db'];
+    $connection = conn($dbname);
+    
     $queryResult = $connection->query($_POST['query']);
     if ($queryResult != false){
-        while ($row = $queryResult->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $queryResult->fetch_assoc()) {
             $arr[] = $row["Field"];
         }
         if (count($arr) == 0){

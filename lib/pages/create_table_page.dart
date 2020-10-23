@@ -7,8 +7,8 @@ import 'package:db_abuser/ui/ui_funcs.dart' as ui_funcs;
 import 'package:db_abuser/funcs.dart' as funcs;
 
 class CreateTablePage extends StatefulWidget {
-  CreateTablePage({Key key}) : super(key: key);
-
+  CreateTablePage(this.db, {Key key}) : super(key: key);
+  final String db;
   @override
   _CreateTablePageState createState() => _CreateTablePageState();
 }
@@ -205,8 +205,8 @@ class _CreateTablePageState extends State<CreateTablePage> {
                                       _createKey.currentState.save();
                                       String query = buildQuery(
                                           _createKey.currentState.value);
-                                      String res =
-                                          await funcs.createTable(query: query);
+                                      String res = await funcs.createTable(
+                                          query: query, db: widget.db);
                                       Navigator.of(context).pushReplacement(
                                           new MaterialPageRoute(
                                         builder: (context) => SuccessPage(

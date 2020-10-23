@@ -16,11 +16,11 @@ List getFieldsText(List fields, List types) {
   return widgets;
 }
 
-Future<Map<String, List>> getFieldsAndTypes(String table) async {
-  var tmp = await funcs.getFields(tableName: table);
+Future<Map<String, List>> getFieldsAndTypes(String table, String db) async {
+  var tmp = await funcs.getFields(tableName: table, db: db);
   print(tmp);
   List fields = tmp["data"];
-  tmp = await funcs.getTypes(tableName: table);
+  tmp = await funcs.getTypes(tableName: table, db: db);
   List types = tmp["data"];
   Map<String, List> m = {"fields": fields, "types": types};
   return m;
