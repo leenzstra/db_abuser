@@ -98,6 +98,11 @@ Future<String> updateTable(
   return data["result"];
 }
 
+Future<String> rawQuery({@required String query, @required String db}) async {
+  Map data = await postHTTP("nofeedback_query.php", query, db: db);
+  return data["result"];
+}
+
 Future<Map<String, dynamic>> selectTable(String table,
     {@required String query, @required String db}) async {
   Map<String, dynamic> data = await postHTTP("get_table.php", query, db: db);

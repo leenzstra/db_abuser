@@ -49,9 +49,6 @@ class _InsertIntoPageState extends State<InsertIntoPage> {
         q += "${valuesList[i]}";
       } else if (funcs.checkFieldIsDate(typesList[i])) {
         q += "'" + (valuesList[i].toString()).substring(0, 10) + "'";
-      } else if (RegExp('null', caseSensitive: false)
-          .hasMatch(valuesList[i].toString())) {
-        q += 'null';
       } else {
         q += "'${valuesList[i]}'";
       }

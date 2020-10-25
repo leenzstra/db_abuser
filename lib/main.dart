@@ -1,5 +1,6 @@
 import 'package:db_abuser/funcs.dart';
 import 'package:db_abuser/httphandler.dart';
+import 'package:db_abuser/pages/raw_sql_page.dart';
 import 'package:db_abuser/pages/select_page.dart';
 import 'package:db_abuser/pages/success_page.dart';
 import 'package:db_abuser/pages/update_page.dart';
@@ -206,16 +207,31 @@ class _HomeState extends State<Home> {
                             child: Text("DELETE")),
                       ],
                     ),
-                    DButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SelectPage(dbname),
-                              ));
-                        },
-                        width: 200,
-                        child: Text("SELECT")),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SelectPage(dbname),
+                                  ));
+                            },
+                            width: 200,
+                            child: Text("SELECT")),
+                        DButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RawSQLPage(dbname),
+                                  ));
+                            },
+                            width: 100,
+                            child: Text("RAW SQL")),
+                      ],
+                    ),
                   ],
                 )),
           ),
