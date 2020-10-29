@@ -36,23 +36,35 @@ Future<Map<String, dynamic>> getTypes(
 Future<Map<String, dynamic>> getTables(String db) async {
   print("DB = $db");
   Map<String, dynamic> data =
-      await postHTTP("get_table.php", "SHOW TABLES", db: db);
+      await postHTTP("get_table.php", "SHOW FULL TABLES", db: db);
   Map<String, dynamic> result = new Map();
   List<String> tables = [];
+  List<String> views = [];
   (data["data"] as List).forEach((element) {
     tables.add(element["Tables_in_$db"].toString());
+    if (element["Table_type"] == "VIEW") {
+      views.add(element["Tables_in_$db"]);
+    }
   });
   result["data"] = tables;
+  result["views"] = views;
   result["result"] = data["result"];
   return result;
 }
 
 Future<Map<String, dynamic>> getDatabases() async {
+  List<String> ignoreDBs = [
+    "information_schema",
+    "performance_schema",
+    "mysql"
+  ];
   Map<String, dynamic> data = await postHTTP("get_table.php", "SHOW DATABASES");
   Map<String, dynamic> result = new Map();
   List<String> tables = [];
   (data["data"] as List).forEach((element) {
-    tables.add(element["Database"].toString());
+    if (!ignoreDBs.contains(element["Database"])) {
+      tables.add(element["Database"].toString());
+    }
   });
   result["data"] = tables;
   result["result"] = data["result"];

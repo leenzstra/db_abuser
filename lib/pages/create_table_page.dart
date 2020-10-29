@@ -3,7 +3,6 @@ import 'package:db_abuser/pages/success_page.dart';
 import 'package:db_abuser/ui/db_form_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:db_abuser/ui/ui_funcs.dart' as ui_funcs;
 import 'package:db_abuser/funcs.dart' as funcs;
 
 class CreateTablePage extends StatefulWidget {

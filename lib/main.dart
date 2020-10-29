@@ -1,5 +1,4 @@
 import 'package:db_abuser/funcs.dart';
-import 'package:db_abuser/httphandler.dart';
 import 'package:db_abuser/pages/raw_sql_page.dart';
 import 'package:db_abuser/pages/select_page.dart';
 import 'package:db_abuser/pages/success_page.dart';
@@ -25,8 +24,6 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
           accentColor: Colors.red,
-          highlightColor: Colors.red,
-          cursorColor: Colors.red,
           inputDecorationTheme:
               InputDecorationTheme(border: OutlineInputBorder())),
       home: Home(),
