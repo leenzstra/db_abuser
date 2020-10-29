@@ -15,11 +15,12 @@ class DropTablePage extends StatefulWidget {
 class _DropTablePageState extends State<DropTablePage> {
   String table;
 
-  buildQuery(String table) {
-    return "DROP TABLE `$table`";
+  buildQuery(String table, bool isView) {
+    String com = isView ? "VIEW" : "TABLE";
+    return "DROP $com `$table`";
   }
 
-  buildField(List<String> list) {
+  buildField(List<String> list, List<String> views) {
     return DBContainer(
       child: FormBuilderDropdown(
         onChanged: (value) {
@@ -31,7 +32,26 @@ class _DropTablePageState extends State<DropTablePage> {
         validators: [FormBuilderValidators.required()],
         onSaved: (newValue) => table = newValue,
         items: list
-            .map((tab) => DropdownMenuItem(value: tab, child: Text("$tab")))
+            .map((tab) => DropdownMenuItem(
+                value: tab,
+                child: views.contains(tab)
+                    ? RichText(
+                        text: TextSpan(
+                          text: '[VIEW] ',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white54),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '$tab',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
+                      )
+                    : Text("$tab")))
             .toList(),
       ),
     );
@@ -62,10 +82,14 @@ class _DropTablePageState extends State<DropTablePage> {
                             List<Widget> children;
                             if (snapshot.hasData) {
                               children = [
-                                buildField(snapshot.data["data"]),
+                                buildField(snapshot.data["data"],
+                                    snapshot.data["views"]),
                                 DButton(
                                     onPressed: () async {
-                                      String query = buildQuery(table);
+                                      bool isView =
+                                          (snapshot.data["views"] as List)
+                                              .contains(table);
+                                      String query = buildQuery(table, isView);
                                       String res = await funcs.dropTable(
                                           query: query, db: widget.db);
                                       Navigator.of(context).pushReplacement(

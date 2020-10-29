@@ -19,12 +19,14 @@ class _AlterTablePageState extends State<AlterTablePage> {
   List fields;
   List types;
   bool isSelected = false;
-  buildQuery(Map values) {
+
+  buildQuery(Map values, bool isView) {
     String spec = values["spec"];
-    return "ALTER TABLE `$table` $spec ";
+    String com = isView ? "VIEW" : "TABLE";
+    return "ALTER $com `$table` $spec ";
   }
 
-  buildTablesField(List<String> list) {
+  buildTablesField(List<String> list, List<String> views) {
     return Container(
       width: 300,
       child: FormBuilderDropdown(
@@ -43,7 +45,26 @@ class _AlterTablePageState extends State<AlterTablePage> {
         validators: [FormBuilderValidators.required()],
         onSaved: (newValue) => table = newValue,
         items: list
-            .map((tab) => DropdownMenuItem(value: tab, child: Text("$tab")))
+            .map((tab) => DropdownMenuItem(
+                value: tab,
+                child: views.contains(tab)
+                    ? RichText(
+                        text: TextSpan(
+                          text: '[VIEW] ',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white54),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '$tab',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
+                      )
+                    : Text("$tab")))
             .toList(),
       ),
     );
@@ -95,7 +116,8 @@ class _AlterTablePageState extends State<AlterTablePage> {
                               List<Widget> children;
                               if (snapshot.hasData) {
                                 children = [
-                                  buildTablesField(snapshot.data["data"]),
+                                  buildTablesField(snapshot.data["data"],
+                                      snapshot.data["views"]),
                                   buildField('spec'),
                                   DButton(
                                       onPressed: () async {
@@ -103,8 +125,12 @@ class _AlterTablePageState extends State<AlterTablePage> {
                                           return;
                                         }
                                         _formKey.currentState.save();
+                                        bool isView =
+                                            (snapshot.data["views"] as List)
+                                                .contains(table);
                                         String query = buildQuery(
-                                            _formKey.currentState.value);
+                                            _formKey.currentState.value,
+                                            isView);
                                         String res = await funcs.dropTable(
                                             query: query, db: widget.db);
                                         Navigator.of(context).pushReplacement(
