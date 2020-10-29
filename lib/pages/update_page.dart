@@ -46,7 +46,7 @@ class _UpdatePageState extends State<UpdatePage> {
     return q;
   }
 
-  buildTablesField(List<String> list) {
+  buildTablesField(List<String> list, List<String> views) {
     return DBContainer(
       child: FormBuilderDropdown(
         onChanged: (value) async {
@@ -63,7 +63,26 @@ class _UpdatePageState extends State<UpdatePage> {
         hint: Text('Выберите таблицу'),
         validators: [FormBuilderValidators.required()],
         items: list
-            .map((tab) => DropdownMenuItem(value: tab, child: Text("$tab")))
+            .map((tab) => DropdownMenuItem(
+                value: tab,
+                child: views.contains(tab)
+                    ? RichText(
+                        text: TextSpan(
+                          text: '[VIEW] ',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white54),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '$tab',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
+                      )
+                    : Text("$tab")))
             .toList(),
       ),
     );
@@ -124,7 +143,8 @@ class _UpdatePageState extends State<UpdatePage> {
                             List<Widget> children;
                             if (snapshot.hasData) {
                               children = [
-                                buildTablesField(snapshot.data["data"]),
+                                buildTablesField(snapshot.data["data"],
+                                    snapshot.data["views"]),
                               ];
                             } else if (snapshot.hasError) {
                               children = <Widget>[

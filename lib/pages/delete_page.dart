@@ -30,7 +30,7 @@ class _DeletePageState extends State<DeletePage> {
     return q;
   }
 
-  buildTablesField(List<String> list) {
+  buildTablesField(List<String> list, List<String> views) {
     return DBContainer(
       child: FormBuilderDropdown(
         onChanged: (value) async {
@@ -48,7 +48,26 @@ class _DeletePageState extends State<DeletePage> {
         validators: [FormBuilderValidators.required()],
         onSaved: (newValue) => table = newValue,
         items: list
-            .map((tab) => DropdownMenuItem(value: tab, child: Text("$tab")))
+            .map((tab) => DropdownMenuItem(
+                value: tab,
+                child: views.contains(tab)
+                    ? RichText(
+                        text: TextSpan(
+                          text: '[VIEW] ',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white54),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: '$tab',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
+                      )
+                    : Text("$tab")))
             .toList(),
       ),
     );
@@ -98,7 +117,8 @@ class _DeletePageState extends State<DeletePage> {
                               List<Widget> children;
                               if (snapshot.hasData) {
                                 children = [
-                                  buildTablesField(snapshot.data["data"]),
+                                  buildTablesField(snapshot.data["data"],
+                                      snapshot.data["views"]),
                                   buildField('where'),
                                   DButton(
                                       onPressed: () async {
