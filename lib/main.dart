@@ -1,4 +1,5 @@
 import 'package:db_abuser/funcs.dart';
+import 'package:db_abuser/pages/procedures_page.dart';
 import 'package:db_abuser/pages/raw_sql_page.dart';
 import 'package:db_abuser/pages/select_page.dart';
 import 'package:db_abuser/pages/success_page.dart';
@@ -229,6 +230,22 @@ class _HomeState extends State<Home> {
                             child: Text("RAW SQL")),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        DButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProceduresPage(dbname),
+                                  ));
+                            },
+                            width: 250,
+                            child: Text("CALL")),
+                      ],
+                    )
                   ],
                 )),
           ),

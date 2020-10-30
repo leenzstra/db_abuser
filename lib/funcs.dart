@@ -19,6 +19,51 @@ bool checkFieldIsDate(String type) {
   return true;
 }
 
+Future<Map<String, dynamic>> getProcedures({@required String db}) async {
+  String query = "SHOW PROCEDURE STATUS WHERE Db = '$db';";
+  Map<String, dynamic> data = await postHTTP("get_table.php", query, db: db);
+  List<String> procs = [];
+  (data["data"] as List).forEach((element) {
+    procs.add(element["Name"].toString());
+  });
+  data["data"] = procs;
+  print("data^^^");
+  print(data);
+  return data;
+}
+
+Future<Map<String, dynamic>> getProcedureParams(
+    {@required String db, @required String proc}) async {
+  String query =
+      "SELECT * FROM information_schema.parameters WHERE SPECIFIC_NAME = '$proc'";
+  Map<String, dynamic> data = await postHTTP("get_table.php", query, db: db);
+  Map<String, dynamic> res = new Map<String, dynamic>();
+  List<String> names = [];
+  List<String> types = [];
+  if (data["data"] != null) {
+    for (int i = 0; i < (data["data"] as List).length; i++) {
+      if (data["data"][i]["PARAMETER_MODE"] != "OUT") {
+        names.add(data["data"][i]["PARAMETER_NAME"].toString());
+        types.add(data["data"][i]["DTD_IDENTIFIER"].toString());
+      }
+    }
+  }
+
+  res["names"] = names;
+  res["types"] = types;
+  return res;
+}
+
+Future<Map<String, dynamic>> callProcedure(
+    {@required String db, @required String query}) async {
+  Map<String, dynamic> data = await postHTTP("get_table.php", query, db: db);
+  data["error"] = data["result"];
+  if (data["data"] == null) {
+    data["data"] = [];
+  }
+  return data;
+}
+
 Future<Map<String, dynamic>> getFields(
     {@required String tableName, @required String db}) async {
   Map<String, dynamic> data =

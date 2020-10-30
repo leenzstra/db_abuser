@@ -19,6 +19,7 @@ class DButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
+          margin: const EdgeInsets.all(2.0),
           width: width,
           height: height,
           child: FlatButton(

@@ -6,11 +6,19 @@ class DatabaseTable extends StatelessWidget {
   final Map data;
   final String query;
 
-  check() {
+  bool check() {
+    print("CHECK: $data");
     if (data["error"] != "OK") {
       return false;
     }
     return true;
+  }
+
+  bool checkQueryAccepted() {
+    if (data['error'] == "OK" || data['error'] == "empty-table-error") {
+      return true;
+    }
+    return false;
   }
 
   List<TableRow> buildTable(List listdata) {
@@ -55,6 +63,11 @@ class DatabaseTable extends StatelessWidget {
       child: check()
           ? Column(
               children: [
+                Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.green,
+                  size: 25,
+                ),
                 Text(query),
                 Table(
                     border: TableBorder.all(color: Colors.red),
@@ -63,8 +76,18 @@ class DatabaseTable extends StatelessWidget {
             )
           : Column(
               children: [
+                Icon(
+                  checkQueryAccepted() == true
+                      ? Icons.check_circle_outline
+                      : Icons.error_outline,
+                  color:
+                      checkQueryAccepted() == true ? Colors.green : Colors.red,
+                  size: 25,
+                ),
                 Text(
-                  "Не удалось построить таблицу: ${data['error']}",
+                  checkQueryAccepted() == true
+                      ? "Запрос выполнен. Получена пустая таблица"
+                      : "Запрос не выполнен: ${data['error']}",
                   style: TextStyle(fontSize: 30),
                 ),
                 Padding(
