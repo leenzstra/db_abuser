@@ -11,6 +11,7 @@ import 'package:db_abuser/pages/delete_page.dart';
 import 'package:db_abuser/pages/drop_table_page.dart';
 import 'package:db_abuser/pages/insert_into_page.dart';
 import 'package:db_abuser/ui/db_form_container.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -145,7 +146,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) =>
                                         CreateTablePage(dbname),
                                   ));
@@ -155,7 +156,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) =>
                                         AlterTablePage(dbname),
                                   ));
@@ -165,7 +166,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) => DropTablePage(dbname),
                                   ));
                             },
@@ -179,7 +180,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) =>
                                         InsertIntoPage(dbname),
                                   ));
@@ -189,7 +190,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) => UpdatePage(dbname),
                                   ));
                             },
@@ -198,7 +199,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) => DeletePage(dbname),
                                   ));
                             },
@@ -212,7 +213,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) => SelectPage(dbname),
                                   ));
                             },
@@ -222,7 +223,7 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) => RawSQLPage(dbname),
                                   ));
                             },
@@ -237,13 +238,13 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) =>
                                         ProceduresPage(dbname),
                                   ));
                             },
                             width: 250,
-                            child: Text("CALL")),
+                            child: Text("PROCEDURES")),
                       ],
                     )
                   ],

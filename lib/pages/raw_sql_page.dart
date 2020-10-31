@@ -1,3 +1,4 @@
+import 'package:db_abuser/datatable.dart';
 import 'package:db_abuser/funcs.dart';
 import 'package:db_abuser/pages/success_page.dart';
 import 'package:db_abuser/ui/button.dart';
@@ -16,6 +17,7 @@ class RawSQLPage extends StatefulWidget {
 
 class _RawSQLPageState extends State<RawSQLPage> {
   final _formKey = GlobalKey<FormBuilderState>();
+  DatabaseTable dbTable;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -47,14 +49,18 @@ class _RawSQLPageState extends State<RawSQLPage> {
                               _formKey.currentState.save();
                               print(_formKey.currentState.value["sql"]);
                               String query = _formKey.currentState.value["sql"];
-                              String res =
+                              Map<String, dynamic> data =
                                   await rawQuery(query: query, db: widget.db);
-                              Navigator.of(context).pushReplacement(
-                                  new MaterialPageRoute(
-                                      builder: (context) => SuccessPage(
-                                          query: query, resultText: res)));
+                              setState(() {
+                                dbTable = new DatabaseTable(data, query);
+                              });
                             },
-                            child: Text("Выполнить"))
+                            child: Text("Выполнить")),
+                        dbTable == null
+                            ? Container(
+                                height: 5,
+                              )
+                            : dbTable
                       ],
                     ),
                   ),

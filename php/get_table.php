@@ -4,17 +4,18 @@
     $connection = conn($dbname);
     $queryResult = $connection->query($_POST['query']);
     if ($queryResult != false){
-        while ($row = $queryResult->fetch_assoc()) {
-            $arr[] = $row;
-        }
-        if (count($arr) == 0){
+        if ($queryResult->num_rows == 0){
             $result = "empty-table-error";
         }
         else{
+            while ($row = $queryResult->fetch_assoc()) {
+                $arr[] = $row;
+            }
             $result = "OK";
         }
     }
-    else{
+    
+    else if($queryResult == false){
         $result = "query-error";
     }
     $getArr["result"] = $result;
